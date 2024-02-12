@@ -38,11 +38,29 @@ describe('probando dao de carrito', () => {
 
     it("Crea un carro", async () => {
         const mockCart = {
-            "products" : []
+            "products": []
         };
-        const { statusCode, body } = await requester.post("/api/carts").send(mockCart);
-        console.log(body);
+        const {
+            statusCode,
+            body
+        } = await requester.post("/api/carts").send(mockCart);
         expect(statusCode).to.equal(200, 'Se esperaba un código de estado 200 al crear un carrito');
         expect(body).to.be.an('object', 'El cuerpo de la respuesta debería ser un objeto');
+    });
+    it("Agrega un producto al carro seleccionado", async () => {
+
+        const cid = '65ca337bc0bc5cd56262e9d1';
+        const pid = '65c915fcbd6e00916c643b78';    
+       
+        const mockCartProduct = {
+            "product":  {_id: pid},
+            "quantity": 1
+        };
+
+
+        const response = await requester.post(`/api/carts/${cid}/products/${pid}`).send(mockCartProduct);
+        // Verifica el código de estado de la respuesta
+        expect(response.status).to.equal(200);
+
     });
 });
