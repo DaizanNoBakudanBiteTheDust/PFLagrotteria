@@ -8,7 +8,7 @@ export default class Users {
 
     getAll = async () => {
       const users = await usersModel.find().lean();
-      return students.map(student => student.toObject());
+      return users;
   }
 
     getByEmail = async(email) => {
