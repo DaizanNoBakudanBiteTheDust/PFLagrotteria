@@ -14,12 +14,15 @@ import {
     getCurrentUser,
     retrievePassword,
     updatePassword,
-    userRole
+    userRole,
+    allUsers
 } from '../../controlers/users.controller.js'
 import configs from '../../config.js'
 
 
 const router = Router();
+
+router.get('/', allUsers);
 
 router.post('/register', registerUser);
 

@@ -31,6 +31,17 @@ import {
     logger
 } from '../utils/logger.js';
 
+const allUsers = async () => {
+    try {
+    const userEmail = await getAll();
+
+    return userEmail;
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const registerUser = async (req, res) => {
     try {
         const {
@@ -413,5 +424,6 @@ export {
     getCurrentUser,
     retrievePassword,
     updatePassword,
-    userRole
+    userRole,
+    allUsers
 }

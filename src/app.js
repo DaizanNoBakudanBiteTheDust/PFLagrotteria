@@ -61,7 +61,6 @@ try {
 } catch (error) {
         console.error("conexion fallida")
 }
-console.log(__maindirname)
 
 const swaggerOptions = {
         definition: {

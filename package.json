@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "mocha --recursive"
+    "test": "mocha"
   },
   "keywords": [],
   "author": "Gabriel Lagrotteria <gabriellagrotteria18@gmail.com>",
@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "chai": "^5.1.0",
-    "mocha": "^10.3.0"
+    "mocha": "^10.3.0",
+    "supertest": "^6.3.4"
   }
 }
