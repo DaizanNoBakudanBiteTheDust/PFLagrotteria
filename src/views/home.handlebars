@@ -1,0 +1,46 @@
+ <div>
+   <div>
+    <h1>Bienvenido {{user.first_name}} {{user.last_name}}</h1>
+    <p>correo: {{user.email}}</p>
+    <p>edad: {{user.age}}</p>
+    <p>rol: {{user.role}}</p>
+    <p>cart: {{cartId}}</p>
+</div>
+
+<div class="float-end">
+  <a href="/api/sessions/logout"><button>Salir de la sesion</button></a>
+</div>
+
+<div class="float-end">
+  <a href="/cart"><button>Carrito</button></a>
+  <a href="/chat"><button>Chat</button></a>
+</div>
+
+
+     <h1>Productos</h1>
+
+
+    {{#each products}}
+    <ul>
+        <li>TITULO: {{this.titulo}}</li>
+        <li>DESCRIPCION: ${{this.descripcion}}</li>
+        <li>code: ${{this.code}}</li>
+        <li>PRECIO: ${{this.precio}}</li>
+        <li>thumbnail: ${{this.thumbnail}}</li>
+        <li>stock: {{this.stock}}</li>
+        <li>Categoria: {{this.category}}</li>
+        <li>ID: {{this._id}}</li>
+        <button type="button" class="btn" onclick="addProduct('{{this._id}}', '{{../cartId}}')">Agregar al Carrito</button>
+    </ul>
+    {{/each}}
+
+    {{#if hasNextPage}}
+    <a href="/?page={{nextPage}}">Siguiente</a>
+  {{/if}}
+  {{#if hasPrevPage}}
+    <a href="/?page={{prevPage}}">Atras</a>
+  {{/if}}
+</div>
+
+<script src="/js/agregarCarrito.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>

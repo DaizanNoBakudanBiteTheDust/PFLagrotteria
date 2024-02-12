@@ -1,0 +1,161 @@
+paths:
+  /api/carts:
+    get:
+      summary: Este servicio obtiene el listado de todos los carritos
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Los Carritos fueron obtenidos satisfactoriamente de la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión
+    post:
+      summary: Este servicio crea un nuevo Carrito
+      tags:
+         - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/createCart'
+      responses:
+         "200":
+           description: El Carrito fue creado satisfactoriamente
+         "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión
+
+  /api/carts/{cid}:
+    get:
+      summary: Este servicio obtiene solo un Carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del Carrito a buscar
+          schema:
+            type: String
+      responses:
+        "200":
+          description: Los Carritos fueron obtenidos correctamente de nuestra BDD
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Carts'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión
+    put:
+      summary: Este servicio actualiza el Carrito a partir de su cid
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del Carrito a buscar
+          schema:
+            type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: El producto fue agregado correctamente al carrito
+        "404":
+          description: El Carrito no fue encontrado en BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión
+
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Este servicio postea el producto en el carrito seleccionado
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del Carrito a buscar
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: El id del producto a buscar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Los Carritos fueron obtenidos satisfactoriamente de la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión
+    put:
+      summary: Este servicio actualiza producto del carrito seleccionado
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del Carrito a buscar
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: El id del producto a buscar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer  # El tipo de contenido es un número entero (quantity)
+                  minimum: 0     # Ajusta según tus requisitos
+      responses:
+        "200":
+          description: La cantidad del producto en el carrito fue actualizada correctamente
+        "404":
+          description: El Carrito o el Producto no fueron encontrados en la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión
+ 
+components:
+  schemas:
+    Carts:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string  # Ajusta esto según el tipo de ObjectId que estás utilizando
+              quantity:
+                type: number
+          default: []
+      example:
+         products: []
+  requestBodies:
+    createCart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por MongoDB, es el id del Carrito
+        products:
+          type: array
+          items:
+            type: object  # Esto debe ajustarse al tipo específico que esperas aquí
+      example:
+        products: []

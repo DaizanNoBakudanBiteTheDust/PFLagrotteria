@@ -1,0 +1,24 @@
+<div style="display:flex; gap: 5rem;">
+    <div>
+        <h1 id="ola">Carrito</h1>
+        <div id="container">
+            <div>
+                <ul>
+                    {{#each cartProducts}}
+                    <ul>
+                        <li>Producto: {{this.product}}</li>
+                        <li>Cantidad: {{this.quantity}}</li>
+                    </ul>
+                    {{/each}}
+                    <p>id carrito:{{cartId}}</p>
+                <input type="hidden" id="cartId" value="{{cartId}}">
+                     <button onclick="purchaseCart()">Comprar</button>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/cartView.js"></script>
+<script src="/js/purchaseCart.js"></script>

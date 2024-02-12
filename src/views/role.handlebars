@@ -1,0 +1,14 @@
+<h1>Users</h1>
+<ul>
+
+        <li class="uid">{{_id}}</li>
+        <li>{{first_name}} {{last_name}}</li>
+        <li>{{email}}</li>
+        <li>{{role}}</li>
+        <li>
+            <button class="btn-primary" type="submit" onclick="changeRole('{{email}}')">Upgrade to premium</button>
+        </li>
+
+</ul>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/userRole.js"></script>

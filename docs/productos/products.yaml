@@ -1,0 +1,174 @@
+paths:
+  /api/products:
+    get:
+      summary: Este servicio obtiene el listado de todos los Productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los Productos fueron obtenidos satisfactoriamente de la BDD
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Products'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión
+    post:
+      summary: Este servicio crea un nuevo producto
+      tags:
+         - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+         "200":
+           description: El producto fue creado satisfactoriamente
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/Products'
+         "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión
+  /api/products/{pid}:
+    get:
+      summary: Este servicio obtiene solo un producto
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: El id del producto a buscar
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Los productos fueron obtenidos correctamente de nuestra BDD
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Products'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión
+    put:
+      summary: Este servicio actualiza el producto a partir de su pid
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: El id del producto a buscar
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: El producto fue actualizado correctamente
+        "404":
+          description: El producto no fue encontrado en BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: "Id autogenerado por MongoDB, es el id del producto"
+        titulo:
+          type: String
+          description: "Nombre del producto"
+        descripcion:
+          type: String
+          description: "Descripción/detalle del producto"
+        precio:
+          type: Number
+          description: "Precio del producto"
+        status:
+          type: Boolean
+          description: "Disponibilidad del producto"
+        thumbnail:
+          type: String
+          description: "Enlace a la imagen del producto"
+        code:
+          type: String
+          description: "Código identificador del producto, debe ser único"
+        stock:
+          type: Number
+          description: "Cantidad de productos restantes"
+        category:
+          type: String
+          description: "Categoría en la cual estará disponible el producto"
+        owner:
+          type: String
+          description: "Rol que publicó el producto"
+      example:
+        _id: ObjectId("jhaskd4545")
+        titulo: Plato
+        descripcion: Plato de porcelana trizado
+        precio: 20
+        status: true
+        thumbnail: https://img.freepik.com/foto-gratis/plato-vacio-sobre-elegancia-negra-sencillez-generada-ia_188544-36383.jpg?size=338&ext=jpg&ga=GA1.1.87170709.1707091200&semt=sph
+        code: sadsfdfadfadsfas
+        stock: 12
+        category: hogar
+        owner: Admin
+
+  requestBodies:
+    updateProduct:
+      type: Object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por MongoDB, es el id del producto
+        titulo:
+          type: String
+          description: Nombre del producto
+        descripcion:
+          type: String
+          description: Descripción/detalle del producto
+        precio:
+          type: Number
+          description: Precio del producto
+        status:
+          type: Boolean
+          description: Disponibilidad del producto
+        thumbnail:
+          type: String
+          description: Enlace a la imagen del producto
+        code:
+          type: String
+          description: Código identificador del producto, debe ser único
+        stock:
+          type: Number
+          description: Cantidad de productos restantes
+        category:
+          type: String
+          description: Categoría en la cual estará disponible el producto
+        owner:
+          type: String
+          description: Rol que publicó el producto
+      example:
+        _id: ObjectId("jhaskd4545")
+        titulo: Plato
+        descripcion: Plato de porcelana trizado
+        precio: 20
+        status: true
+        thumbnail: https://img.freepik.com/foto-gratis/plato-vacio-sobre-elegancia-negra-sencillez-generada-ia_188544-36383.jpg?size=338&ext=jpg&ga=GA1.1.87170709.1707091200&semt=sph
+        code: sadsfdfadfadsfas
+        stock: 12
+        category: hogar
+        owner: Admin
