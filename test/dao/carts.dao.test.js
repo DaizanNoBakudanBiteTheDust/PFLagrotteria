@@ -15,8 +15,6 @@ try {
 }
 
 
-let productsDao;
-let usersDao;
 let cartsDao;
 
 describe('probando dao de carrito', () => {
