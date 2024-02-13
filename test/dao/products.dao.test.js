@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import Products from '../../src/dao/testManagerDb/products.dao.js';
 import configs from '../../src/config.js';
-import { expect } from 'chai';
+import {
+    expect
+} from 'chai';
 import supertest from 'supertest';
 
 const requester = supertest(`http://localhost:${configs.port}`);
@@ -18,7 +20,7 @@ let usersDao;
 let cartsDao;
 
 describe('probando dao de productos', () => {
-    before(async () =>{
+    before(async () => {
         productsDao = new Products();
     });
 
@@ -32,7 +34,7 @@ describe('probando dao de productos', () => {
 
         // Verificar que la solicitud se haya realizado correctamente
         expect(statusCode).to.be.eql(200);
-        
+
         // Verificar que el cuerpo de la respuesta tenga la estructura esperada
         // Esto puede variar dependiendo de la implementación de tu API
         expect(body).to.be.an('object');
@@ -41,7 +43,7 @@ describe('probando dao de productos', () => {
     it('trae producto por id', async () => {
         // Realizar la solicitud GET para obtener el producto
 
-        const pid = '65c915fcbd6e00916c643b78'; 
+        const pid = '65c915fcbd6e00916c643b78';
         const {
             statusCode,
             body
@@ -49,11 +51,26 @@ describe('probando dao de productos', () => {
 
         // Verificar que la solicitud se haya realizado correctamente
         expect(statusCode).to.be.eql(200);
-        
+
+        // Verificar que el cuerpo de la respuesta tenga la estructura esperada
+        // Esto puede variar dependiendo de la implementación de tu API
+        expect(body).to.be.an('object');
+    });
+    it('trae productos limitados por categoria', async () => {
+        // Realizar la solicitud GET para obtener categoria limitada
+
+        const category = "comida";
+        const {
+            statusCode,
+            body
+        } = await requester.get(`/api/products?query=category&queryValue=${category}`);
+
+        // Verificar que la solicitud se haya realizado correctamente
+        expect(statusCode).to.be.eql(200);
+
         // Verificar que el cuerpo de la respuesta tenga la estructura esperada
         // Esto puede variar dependiendo de la implementación de tu API
         expect(body).to.be.an('object');
     });
 
 });
-
