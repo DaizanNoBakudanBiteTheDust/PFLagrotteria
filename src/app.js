@@ -178,7 +178,16 @@ io.on('connection', socket => {
 
                 const _id = data
                 await prodManager.delete(_id);
-                io.emit('showProducts', await prodManager.getAll(req));
+
+                const query = {
+                        limit: 10,
+                        page: 1,
+                        sort: 'asc',
+                        query: null,
+                        queryValue: null
+                    };
+
+                io.emit('showProducts', await prodManager.getAll({query}));
 
         });
 
