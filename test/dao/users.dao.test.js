@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
-import Users from '../../src/dao/testManagerDb/users.dao.js';
-import Carts from '../../src/dao/testManagerDb/cart.dao.js';
-import Products from '../../src/dao/testManagerDb/products.dao.js';
+import Users from '../../src/dao/dbManagers/users.dao.js';
 import configs from '../../src/config.js';
 import { expect } from 'chai';
 import supertest from 'supertest';
@@ -14,10 +12,7 @@ try {
     console.log(error)
 }
 
-
-let productsDao;
 let usersDao;
-let cartsDao;
 
 
 describe('probando dao de usuario', () => {
@@ -25,25 +20,44 @@ describe('probando dao de usuario', () => {
         usersDao = new Users();
     });
 
-    /*
-    it('el dao debe crear un usuario en la base de datos', async () => {
-        const mockUser = {
-            first_name: "lucas",
-            last_name: "pato",
-            email: "qaasdsf@gmail.com",
+    it('register', async () => {
+        // Realizar la solicitud Post para registrar usuario
+
+        const user = {
+            email: "lolo@lolo.com",
+            first_name: "Lolo",
+            last_name: "Lololo",
             age: 20,
-            password: '1234'
-        };
+            password: "1234"
+        }
 
-        const result = await usersDao.save(mockUser);
-        assert.ok(result._id);
-
-        const {
-            statusCode,
-            _body
-        } = await requester.post('/api/sessions/register').send(mockUser);
-        expect(statusCode).to.be.eql(200);
-        expect(_body.payload).to.have.property('_id');
+        const response = await requester.post('/api/sessions/register').send(user);
+       
+        // Verificar que la solicitud se haya realizado correctamente
+        expect(response.status).to.be.eql(201, 'usuario registrado correctamente');
     });
-    */
+
+    it('login', async () => {
+        // Realizar la solicitud Post para loguear usuario
+
+        const user = {
+            email: "lolo@lolo.com",
+            password: "1234"
+        }
+
+        const response = await requester.post('/api/sessions/login').send(user);
+       
+        // Verificar que la solicitud se haya realizado correctamente
+        expect(response.status).to.be.eql(200, 'usuario logueado correctamente');
+    });
+
+    it('logout', async () => {
+        // Realizar la solicitud get para obtener usuario actual
+
+        const response = await requester.get('/api/sessions/logout')
+       
+        // Verificar que la solicitud se haya realizado correctamente
+        expect(response.status).to.be.eql(302, 'session destruida');
+    });
+    
 });
