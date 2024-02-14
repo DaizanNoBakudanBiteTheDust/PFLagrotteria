@@ -34,6 +34,7 @@ import { addLogger, logger } from './utils/logger.js';
 //Managers para el socket
 
 import Products from './dao/dbManagers/products.dao.js';
+import {postProducts} from './controlers/products.controller.js'
 import Carts from './dao/dbManagers/cart.dao.js';
 import Messages from './dao/dbManagers/message.dao.js';
 
@@ -156,9 +157,20 @@ const chatText = [];
 io.on('connection', socket => {
 
         //agrego producto via form
-        socket.on('agregarProducto', async data => {
+        socket.on('agregarProducto', async (data) => {
+
                 await prodManager.save(data);
-                io.emit('showProducts', await prodManager.getAll(req));
+
+                
+                const query = {
+                        limit: 10,
+                        page: 1,
+                        sort: 'asc',
+                        query: null,
+                        queryValue: null
+                    };
+
+                io.emit('showProducts', await prodManager.getAll({query}));
         });
 
          //elimino via form que me pasa el cliente

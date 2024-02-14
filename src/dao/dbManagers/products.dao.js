@@ -58,6 +58,7 @@ export default class Products {
         try {
           // Intenta crear el producto
           const result = await productsModel.create(product);
+          console.log("soy result del dao", result)
           return result;
         } catch (error) {
           if (error.code === 11000) { // Código de error duplicado de MongoDB

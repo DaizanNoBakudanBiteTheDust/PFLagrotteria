@@ -16,18 +16,11 @@ agregarForm.addEventListener('submit', (e) => {
         code: document.getElementById('code').value,
         stock: parseInt(document.getElementById('stock').value), 
         category: document.getElementById('category').value
-    };
+    };    
 
-    const queryParams = {
-        limit: 10,
-        page: 1,
-        sort: 'asc',
-        query: null,
-        queryValue: null
-    };
 
     // Enviar el nuevo producto al servidor a través de sockets
-    socket.emit('agregarProducto', {nuevoProducto, queryParams});
+    socket.emit('agregarProducto', nuevoProducto);
 
     // Limpiar los campos de entrada
     agregarForm.reset();

@@ -36,12 +36,13 @@ const getProducts = async (req, res) => {
     };
 
 const postProducts = async (req, res) => {
-
+     try {
     const io = req.app.get('socketio');
     const product = req.body;
 
     const owner = user.role === 'admin' ? 'admin' : user.username;
 
+   
     if (!product.titulo || !product.descripcion || !product.precio || !product.status || !product.thumbnail || !product.code || !product.stock || !product.category) {
         //Error del cliente
             throw customError.createError({
@@ -52,7 +53,7 @@ const postProducts = async (req, res) => {
             })
     }
 
-    try {
+   
 
             const createdProduct = await saveProduct({
                     titulo: product.titulo,
@@ -64,6 +65,8 @@ const postProducts = async (req, res) => {
                     stock: product.stock,
                     category: product.category
             });
+
+            console.log(createdProduct)
 
             io.emit('showProducts', createdProduct);
 
