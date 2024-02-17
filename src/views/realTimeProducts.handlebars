@@ -1,4 +1,6 @@
 <h1>Formulario para Agregar Producto</h1>
+<p>
+{{user.first_name}}</p>
 <form id="agregarForm">
      <label for="titulo">Título:</label>
     <input id="titulo" name="titulo" required>
@@ -66,6 +68,7 @@
   </div>
 </div>
 <script src="/socket.io/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jwt-decode/3.1.2/jwt-decode.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="/js/agregarCarrito.js"></script>
 <script src="/js/index.js"></script>

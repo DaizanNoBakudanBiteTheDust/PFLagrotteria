@@ -41,7 +41,6 @@ const postProducts = async (req, res) => {
     const product = req.body;
 
     const owner = user.role === 'admin' ? 'admin' : user.username;
-
    
     if (!product.titulo || !product.descripcion || !product.precio || !product.status || !product.thumbnail || !product.code || !product.stock || !product.category) {
         //Error del cliente

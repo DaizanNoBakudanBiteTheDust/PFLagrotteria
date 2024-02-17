@@ -107,9 +107,11 @@ router.get('/resetPassword/:token', publicAccess, (req, res) => {
 });
 
 
-router.get('/admin', AdminAccess, async (req, res) => {
+router.get('/admin', AdminAccess, premiumAccess, async (req, res) => {
+    let user = req.user;
     res.render('realTimeProducts', {
-        products: await prodManager.getAll(req)
+        products: await prodManager.getAll(req),
+        user
     });
 });
 
@@ -201,12 +203,6 @@ router.get('/productsLog',AdminAccess, async (req, res) => {
 
 });
 
-
-router.get('/realTimeProducts', AdminAccess, premiumAccess, async (req, res) => {
-    res.render('realTimeProducts', {
-        products: await prodManager.getAll(req)
-    });
-});
 
 router.get('/products', async (req, res) => {
 

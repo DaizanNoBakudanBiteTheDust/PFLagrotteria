@@ -1,11 +1,24 @@
 // Socket comunica con servidor
 const socket = io();
 
+//obtengo data
+
+let userEmail="";
+let userRole = "";
+
+
 //AGREGAR
 const agregarForm = document.getElementById('agregarForm');
 
 agregarForm.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    let owner = "";
+    if (userRole != "admin") {
+        owner = userEmail;
+    } else {
+    owner = "admin";
+    }
 
     const nuevoProducto = {
         titulo: document.getElementById('titulo').value,
@@ -15,12 +28,14 @@ agregarForm.addEventListener('submit', (e) => {
         thumbnail: document.getElementById('thumbnail').value,
         code: document.getElementById('code').value,
         stock: parseInt(document.getElementById('stock').value), 
-        category: document.getElementById('category').value
+        category: document.getElementById('category').value,
+        owner: owner
     };    
 
 
     // Enviar el nuevo producto al servidor a través de sockets
     socket.emit('agregarProducto', nuevoProducto);
+
 
     // Limpiar los campos de entrada
     agregarForm.reset();
