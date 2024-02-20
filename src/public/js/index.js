@@ -15,7 +15,7 @@ agregarForm.addEventListener('submit', (e) => {
 
     let owner = "";
     if (userRole != "admin") {
-        owner = userEmail;
+        owner = user.email;
     } else {
     owner = "admin";
     }

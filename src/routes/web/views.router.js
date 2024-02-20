@@ -60,6 +60,7 @@ const AdminAccess = (req, res, next) => {
     let user = decodedToken(token)
 
     if (adminUserPredator.email && adminUserPredator.password) {
+        req.user = user;
         next();
     } else {
         return res.status(403).send('No tienes permisos para acceder a esta ruta');
@@ -72,6 +73,7 @@ const premiumAccess = (req, res, next) => {
     let user = decodedToken(token)
 
     if (adminUserPredator.email && adminUserPredator.password) {
+        req.user = user;
         next();
     } else {
         return res.status(403).send('No tienes permisos para acceder a esta ruta');
@@ -109,6 +111,7 @@ router.get('/resetPassword/:token', publicAccess, (req, res) => {
 
 router.get('/admin', AdminAccess, premiumAccess, async (req, res) => {
     let user = req.user;
+    console.log(user);
     res.render('realTimeProducts', {
         products: await prodManager.getAll(req),
         user

@@ -1,6 +1,8 @@
 <h1>Formulario para Agregar Producto</h1>
 <p>
-{{user.first_name}}</p>
+
+{{user.email}}</p>
+
 <form id="agregarForm">
      <label for="titulo">Título:</label>
     <input id="titulo" name="titulo" required>
@@ -52,6 +54,7 @@
         <li><img src="{{this.thumbnail}}`"> </li>
         <li>stock: ${{this.stock}}</li>
         <li>Categoria: {{this.category}}</li>
+        <li>Owner: {{this.owner}}</li>
         <li>ID: {{this._id}}</li>
     </ul>
 
