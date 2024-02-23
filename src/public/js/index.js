@@ -3,8 +3,10 @@ const socket = io();
 
 //obtengo data
 
-let userEmail="";
-let userRole = "";
+let userEmail = document.getElementById('emailusuario').textContent;
+let userRole = document.getElementById('roleusuario').textContent;
+
+console.log(userEmail, userRole);
 
 
 //AGREGAR
@@ -15,7 +17,7 @@ agregarForm.addEventListener('submit', (e) => {
 
     let owner = "";
     if (userRole != "admin") {
-        owner = user.email;
+        owner = userEmail;
     } else {
     owner = "admin";
     }

@@ -1,11 +1,18 @@
 import {
     Router
 } from 'express';
-import configs from '../../config.js'
-import Products from '../../dao/dbManagers/products.dao.js';
+import configs from '../../config.js';
 import Carts from '../../dao/dbManagers/cart.dao.js';
 import Messages from '../../dao/dbManagers/message.dao.js';
 import Users from '../../dao/dbManagers/users.dao.js';
+import {
+    deleteProducts,
+    getProducts,
+    postProducts,
+    updateProductById,
+    getProductById,
+    getProductsByUserId
+} from '../../controlers/products.controller.js';
 import passport from 'passport';
 import {decodedToken} from '../../utils.js'
 import {
@@ -16,7 +23,6 @@ import {
 
 const router = Router();
 
-const prodManager = new Products();
 const cartManager = new Carts();
 const chatManager = new Messages();
 const userManager = new Users();
@@ -44,10 +50,9 @@ const privateAccess = (req, res, next) => {
         if (err || !req.user) {
             return res.status(401).send('Unauthorized');
         }
-
         if (req.user.role === 'admin') {
             res.redirect('/admin');
-        } else {
+        }else {
             next();
         }
     });
@@ -65,19 +70,21 @@ const AdminAccess = (req, res, next) => {
     } else {
         return res.status(403).send('No tienes permisos para acceder a esta ruta');
     }
+
+    req.user = user;
+
+    if(user.role !== "premium" && user.role !== "admin" ) return res.redirect('/');
 }
 
 const premiumAccess = (req, res, next) => {
-    let token = req.cookies.coderCookieToken;
-
-    let user = decodedToken(token)
-
-    if (adminUserPredator.email && adminUserPredator.password) {
+    passportJWT(req, res, (err) => {
+        if (err || !req.user) {
+            return res.status(401).send('Unauthorized');
+        }else {
+            next();
+        }})
         req.user = user;
-        next();
-    } else {
-        return res.status(403).send('No tienes permisos para acceder a esta ruta');
-    }
+        if(user.role !== "premium" && user.role !== "admin" ) return res.redirect('/');
 }
 
 
@@ -111,9 +118,11 @@ router.get('/resetPassword/:token', publicAccess, (req, res) => {
 
 router.get('/admin', AdminAccess, premiumAccess, async (req, res) => {
     let user = req.user;
+    let products = await getProducts(req);
+    
     console.log(user);
     res.render('realTimeProducts', {
-        products: await prodManager.getAll(req),
+        products,
         user
     });
 });
@@ -142,14 +151,17 @@ router.get('/', privateAccess, async (req, res) => {
             // Utiliza _doc si está presente (por ejemplo, en la estrategia JWT)
             userData = user._doc;
         }
+        
+        const isPremium = userData.role === "premium";
 
         // Obtener todos los productos
-        const allProducts = await prodManager.getAll(req);
+        const allProducts = await getProducts(req);
 
         res.render('home', {
             user: userData,
             cartId: userData.carts[0].cart._id,// solo funciona en null por ahora
-            products: allProducts
+            products: allProducts,
+            isPremium: "premium",
         });
     } catch (error) {
         req.logger.error(error);
@@ -201,7 +213,7 @@ router.get('/chat', privateAccess, async (req, res) => {
 router.get('/productsLog',AdminAccess, async (req, res) => {
 
     res.render('home', {
-        products: await prodManager.getAll(req)
+        products: await getProducts(req)
     });
 
 });

@@ -10,7 +10,7 @@ export default class Products {
     }
 
 
-    async getAll(req) {
+    getAll = async (req) => {
         try {
             const limit = parseInt(req.query.limit) || 10;
             const page = parseInt(req.query.page) || 1;
@@ -49,6 +49,16 @@ export default class Products {
 
         } catch (error) {
             logger.error('Error al obtener productos:', error);
+            throw error;
+        }
+    }
+
+    getProductsByUser = async (req, userId) => {
+        try {
+            const products = await productsModel.find({ owner: userId }).lean();
+            return products;
+        } catch (error) {
+            logger.error('Error al obtener productos del usuario:', error);
             throw error;
         }
     }

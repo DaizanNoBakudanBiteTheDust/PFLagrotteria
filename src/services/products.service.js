@@ -10,6 +10,11 @@ const getAllProducts = async (req) => {
     return allProducts;
 }
 
+const getProductsByUser = async (req, userId) => {
+    const allProducts = await manager.getProductsByUser(req, userId);
+    return allProducts;
+}
+
 const saveProduct = async (product) => {
     const saveProducts = await manager.save(product);
 
@@ -41,5 +46,6 @@ export {
     getAllProducts,
     saveProduct,
     deleteProduct,
-    idProduct
+    idProduct,
+    getProductsByUser
 }
