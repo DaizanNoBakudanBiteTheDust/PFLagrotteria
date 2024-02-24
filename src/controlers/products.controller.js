@@ -143,16 +143,14 @@ const updateProductById = async (req, res) => {
 
 const deleteProducts = async (req, res) => {
 
-        const io = req.app.get('socketio');
-        const user = req.user;
-        const {
-                pid
-        } = req.params;
-
-        const role = user.role;
-
         try {
-
+                const io = req.app.get('socketio');
+                const user = req.user;
+                const {
+                        pid
+                } = req.params;
+        
+                const role = user.role;
                 // Obtener el producto por su ID
                 const product = await productsModel.findById(pid);
 
@@ -164,7 +162,7 @@ const deleteProducts = async (req, res) => {
                         });
                 }
 
-                if (user.role !== 'premium') {
+                if (role !== 'premium') {
                         return res.status(403).send({
                                 status: 'error',
                                 error: 'You are not authorized to delete products'
@@ -178,19 +176,22 @@ const deleteProducts = async (req, res) => {
                                 error: 'You are not authorized to delete this product'
                         });
                 }
-                const result = await productsModel.deleteOne({
+                const result = await deleteProduct({
                         _id: pid
-                });
+                }, product);
+
+                io.emit('showProducts', result);
                 res.send({
                         status: 'success',
                         message: 'product deleted',
                         result
                 });
         } catch (error) {
-                return res.status(404).send({
-                        status: 'error',
-                        error: 'product not exist'
-                })
+                console.error('Error al eliminar el producto', error);
+        return res.status(500).send({
+            status: 'error',
+            error: 'Error al eliminar el producto'
+        });
         }
 }
 

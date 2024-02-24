@@ -21,8 +21,8 @@ const saveProduct = async (product) => {
     return saveProducts;
 }
 
-const deleteProduct = async () => {
-    const deleteProducts = await manager.delete();
+const deleteProduct = async (id, product) => {
+    const deleteProducts = await manager.delete(id, product);
 
     return deleteProducts;
 }

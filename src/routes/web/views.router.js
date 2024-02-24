@@ -59,6 +59,23 @@ const privateAccess = (req, res, next) => {
 
 }
 
+const premiumAccess = (req, res, next) => {
+    let token = req.cookies.coderCookieToken;
+
+    let user = decodedToken(token)
+
+    if (adminUserPredator.email && adminUserPredator.password) {
+        req.user = user;
+        next();
+    } else {
+        return res.status(403).send('No tienes permisos para acceder a esta ruta');
+    }
+
+    req.user = user;
+
+    if(user.role !== "premium" && user.role !== "admin" ) return res.redirect('/');
+}
+
 const AdminAccess = (req, res, next) => {
     let token = req.cookies.coderCookieToken;
 
@@ -76,16 +93,7 @@ const AdminAccess = (req, res, next) => {
     if(user.role !== "premium" && user.role !== "admin" ) return res.redirect('/');
 }
 
-const premiumAccess = (req, res, next) => {
-    passportJWT(req, res, (err) => {
-        if (err || !req.user) {
-            return res.status(401).send('Unauthorized');
-        }else {
-            next();
-        }})
-        req.user = user;
-        if(user.role !== "premium" && user.role !== "admin" ) return res.redirect('/');
-}
+
 
 
 router.get('/register', publicAccess, (req, res) => {
@@ -161,7 +169,7 @@ router.get('/', privateAccess, async (req, res) => {
             user: userData,
             cartId: userData.carts[0].cart._id,// solo funciona en null por ahora
             products: allProducts,
-            isPremium: "premium",
+            isPremium: isPremium,
         });
     } catch (error) {
         req.logger.error(error);

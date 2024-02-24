@@ -3,8 +3,8 @@ const socket = io();
 
 //obtengo data
 
-let userEmail = document.getElementById('emailusuario').textContent;
-let userRole = document.getElementById('roleusuario').textContent;
+let userEmail = document.getElementById('emailUsuario').textContent;
+let userRole = document.getElementById('roleUsuario').textContent;
 
 console.log(userEmail, userRole);
 
@@ -53,11 +53,23 @@ eliminarForm.addEventListener('submit', (e) => {
 
     const productId = productIdInput.value;
 
+    if (userRole !== "admin" || userRole !== "premium") {
+        Swal.fire({
+            title: "Error",
+            text: "no tienes permiso de borrar productos, ni siquiera deberias estar aqui",
+            icon: "error",
+          });
+    }
     // Enviar el ID del producto al servidor a través de sockets
-    socket.emit('eliminarProducto', productId);
+    socket.emit('eliminarProducto', productId, userEmail, userRole);
 
     // Limpiar el campo de entrada
     productIdInput.value = '';
+
+    Swal.fire({
+        title: "Producto Eliminado",
+        text: "haz eliminado un producto",
+      });
 });
 
 //acá pondré los productos que me pasa el cliente
@@ -77,6 +89,7 @@ socket.on('showProducts', data => {
                 <li>stock: ${product.stock}</li>
                 <li>category: ${product.category}</li>
                 <li>id: ${product._id}</li>
+                <li>owner: ${product.owner}</li>
             </ul>
         `
     })

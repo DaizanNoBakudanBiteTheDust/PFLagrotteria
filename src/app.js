@@ -34,7 +34,7 @@ import { addLogger, logger } from './utils/logger.js';
 //Managers para el socket
 
 import Products from './dao/dbManagers/products.dao.js';
-import {postProducts} from './controlers/products.controller.js'
+import {deleteProducts} from './controlers/products.controller.js';
 import Carts from './dao/dbManagers/cart.dao.js';
 import Messages from './dao/dbManagers/message.dao.js';
 
@@ -160,7 +160,6 @@ io.on('connection', socket => {
         socket.on('agregarProducto', async (data) => {
 
                 await prodManager.save(data);
-
                 
                 const query = {
                         limit: 10,
@@ -174,10 +173,21 @@ io.on('connection', socket => {
         });
 
          //elimino via form que me pasa el cliente
-         socket.on('eliminarProducto', async (data) => {
+         socket.on('eliminarProducto', async (data, userEmail, userRole) => {
 
-                const _id = data
-                await prodManager.delete(_id);
+               let productData = await prodManager.getProductById(data);
+
+               console.log(userEmail)
+               console.log(userRole)
+               console.log(data)
+
+               if (userEmail === productData.owner && userRole == "premium" || userRole == "admin") {
+
+                const productId = productData._id;
+                const product = productData;
+
+                await prodManager.delete(productId, product);
+           
 
                 const query = {
                         limit: 10,
@@ -188,6 +198,7 @@ io.on('connection', socket => {
                     };
 
                 io.emit('showProducts', await prodManager.getAll({query}));
+               }
 
         });
 
