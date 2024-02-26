@@ -38,6 +38,7 @@ const usersSchema = new mongoose.Schema({
         default: 'user'
     },
     resetPasswordToken: { type: String },
+    avatar: String,
     documents: [
         {
           name: String, //nombre del documento

@@ -17,8 +17,9 @@ import {
     userRole,
     allUsers,
     userDocs
-} from '../../controlers/users.controller.js'
-import configs from '../../config.js'
+} from '../../controlers/users.controller.js';
+import configs from '../../config.js';
+import {uploader} from '../../utils/uploader.js';
 
 
 const router = Router();
@@ -47,7 +48,7 @@ router.post('/resetPassword/:token', updatePassword);
 
 router.post("/premium/:uid", userRole);
 
-router.post("/:uid/documents", userDocs);
+router.post("/:uid/documents", uploader.array('files'), userDocs);
 
 router.get('/github', passport.authenticate('github', {
     scope: ['user:email']

@@ -75,5 +75,29 @@ export default class Users {
           console.log(error);
         }
       };
+
+      updateLastConnection = async (email, last_connection) => {
+        try {
+          const result = await usersModel.findOneAndUpdate(
+            { email: email },
+            { last_connection: last_connection },
+            { new: true }
+          );
+    
+          return result;
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    
+      updateDocuments = async (email, document) => {
+        try {
+          const result = await usersModel.updateOne({ email }, { $set: document });
+          return result;
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    
       
 } 

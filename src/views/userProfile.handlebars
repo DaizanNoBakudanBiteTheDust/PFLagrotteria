@@ -1,0 +1,86 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col text-center">
+      <h1 class="text-center">
+        profile</h1>
+      <div class="my-5 d-block justify-content-center">
+        {{#if user.avatar}}
+          <img
+            class="img-thumbnail border border-dark m-3"
+            width="200px"
+            height="200px"
+            src={{user.avatar}}
+            alt={{user.image}}
+          />
+        {{/if}}
+        <p><b>Full Name:</b> {{user.first_name}} {{user.last_name}}</p>
+        <p><b>Email:</b> {{user.email}}</p>
+        <p><b>Age:</b> {{user.age}}</p>
+        <p><b>Role:</b> {{user.role}}</p>
+        <p><b>Last Connection:</b> {{user.last_connection}}</p>
+        <p class="userIdProf">{{user._id}}</p>
+        <div>
+          <p><b>Documentation Status:</b></p>
+          <ul>
+            {{#each user.status}}
+              {{#if this}}
+                <li >{{@key}}: <span class="text-success fw-bold">{{this}}</span></li>
+              {{else}}
+                <li >{{@key}}: <span class="text-danger fw-bold">{{this}}</span></li>
+              {{/if}}
+            {{/each}}
+          </ul>
+        </div>
+        <div>
+          <p><b>All Documents:</b></p>
+          <ul>
+            {{#each user.documents}}
+              <li>{{this.name}}</li>
+              <li>{{this.reference}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col text-center">
+      <h2 class="text-center fw-bold text-primary my-2">Upload files</h2>
+
+      <form id="uploadForm" enctype="multipart/form-data" method="POST">
+
+        <div class="mb-3">
+          <label for="fileType" class="form-label">File type:</label>
+          <select id="fileType" class="form-select" name="fileType">
+            <option value="" disabled selected>Select file type...</option>
+            <option value="1-profileImage">Image Profile</option>
+            <option value="2-productImage">Image of products</option>
+            <option value="3-document">Documents</option>
+          </select>
+        </div>
+
+        <div id="documentTypeContainer" class="mb-3 visually-hidden">
+          <label for="documentType" class="form-label">Document Type:</label>
+          <select id="documentType" class="form-select" name="documentType">
+            <option value="id_doc">Personal ID</option>
+            <option value="address_doc">Proof Address</option>
+            <option value="account_doc">Proof account balance</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="file" class="form-label">Select files:</label>
+          <input
+            type="file"
+            class="form-control"
+            id="files"
+            name="files"
+            multiple
+          />
+        </div>
+        <input type="submit" class="btn btn-primary my-2" value="Upload" />
+      </form>
+    </div>
+  </div>
+</div>
+<script src="/js/profile.js"></script>

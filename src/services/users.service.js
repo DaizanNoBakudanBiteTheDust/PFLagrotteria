@@ -41,6 +41,16 @@ const getUserById = async (id) => {
     return response;
 } 
 
+const updateDocuments = async (email, document) => {
+    const result = await manager.updateDocuments(email, document);
+    return result;
+  };
+
+const lastConnection = async (email, last_connection) => {
+    const result = await manager.updateLastConnection(email, last_connection);
+    return result;
+  };
+
 
 
 export {
@@ -50,5 +60,7 @@ export {
     cartToUser,
     updateUserPass,
     updateRole,
-    getUserById
+    getUserById,
+    updateDocuments,
+    lastConnection
 }

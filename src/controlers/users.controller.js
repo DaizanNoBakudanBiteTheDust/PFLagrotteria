@@ -5,13 +5,16 @@ import {
     cartToUser,
     updateUserPass,
     updateRole,
-    getUserById
+    getUserById,
+    updateDocuments,
+    lastConnection
 } from '../services/users.service.js';
 import {
     createHash,
     isValidPassword,
     generateToken
 } from '../utils.js';
+import {docName} from '../utils/uploader.js';
 import jwt from 'jsonwebtoken';
 import {
     saveCart
@@ -326,8 +329,79 @@ const userRole = async (req, res) => {
 
   //Documentos
 
-const UserDocs = async (req,res) => {
+const userDocs = async (req,res) => {
+    const {uid} = req.params;
+    //busco el user por email
+    const userData = await getUserById(uid);
 
+    try {
+      const files = req.files;
+      const fileType = req.body.fileType;
+      const documentType = req.body.documentType;
+      console.log(files)
+      if (!files)
+        res
+          .status(400)
+          .send({ status: "error", error: "Files could not be loaded" }); //Verifica si se subió un archivo.
+  
+      if (files.length === 0)
+        res.status(400).send({ status: "error", error: "No files uploaded" });
+  
+  
+      if (!userData) {
+        res.status(400).send({ status: "error", error: "User not found" });
+      }
+  
+      let newStatus = userData.status;
+      let documents = userData.documents || [];
+  
+      if (docName(fileType, documentType) === "id_doc") {
+        userData.status.id_doc = true;
+        files.forEach((file) => {
+          documents.push({ name: file.originalname, reference: file.path });
+        });
+      }
+      if (docName(fileType, documentType) === "address_doc") {
+        userData.status.address_doc = true;
+        files.forEach((file) => {
+          documents.push({ name: file.originalname, reference: file.path });
+        });
+      }
+      if (docName(fileType, documentType) === "account_doc") {
+        userData.status.account_doc = true;
+        files.forEach((file) => {
+          documents.push({ name: file.originalname, reference: file.path });
+        });
+      }
+      if (docName(fileType, documentType) === "image-profile") {
+        files.forEach((file) => {
+          documents.push({ name: file.originalname, reference: file.path });
+        });
+      }
+      if (docName(fileType, documentType) === "image-product") {
+        files.forEach((file) => {
+          documents.push({ name: file.originalname, reference: file.path });
+        });
+      }
+  
+      console.log("documents:");
+      console.log(documents);
+      console.log("status:");
+      console.log(newStatus);
+  
+      const docUpdated = {
+        documents,
+        status: newStatus,
+      };
+  
+      const result = await updateDocuments(
+        userData.email,
+        docUpdated
+      );
+      res.send({ status: "success", payload: result });
+    } catch (error) {
+      console.log(error);
+    }
 }
 
 //Github
@@ -431,5 +505,6 @@ export {
     retrievePassword,
     updatePassword,
     userRole,
-    allUsers
+    allUsers,
+    userDocs
 }
