@@ -298,7 +298,10 @@ router.get('/realTimeCarts', AdminAccess, async (req, res) => {
 
 router.get('/profile', privateAccess, async (req, res) => {
     let user = req.user;
-  res.render("userProfile", { user: user });
+    let status = user.status;
+    console.log(user)
+  res.render("userProfile", { user: user,
+status: status });
 });
 
 router.get('/mockingproducts', AdminAccess, async (req, res) => {

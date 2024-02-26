@@ -22,13 +22,21 @@
         <div>
           <p><b>Documentation Status:</b></p>
           <ul>
-            {{#each user.status}}
-              {{#if this}}
-                <li >{{@key}}: <span class="text-success fw-bold">{{this}}</span></li>
-              {{else}}
-                <li >{{@key}}: <span class="text-danger fw-bold">{{this}}</span></li>
-              {{/if}}
-            {{/each}}
+          {{#if user.status.id_doc}}
+  <li>id_doc: true</li>
+{{else}}
+  <li>id_doc: false</li>
+{{/if}}
+{{#if user.status.address_doc}}
+  <li>id_doc: true</li>
+{{else}}
+  <li>id_doc: false</li>
+{{/if}}
+{{#if user.status.account_doc}}
+  <li>id_doc: true</li>
+{{else}}
+  <li>id_doc: false</li>
+{{/if}}
           </ul>
         </div>
         <div>
