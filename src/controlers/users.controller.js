@@ -118,6 +118,7 @@ const adminUserPredator = {
 };
 
 
+
 const loginUser = async (req, res) => {
     const {
         email,
@@ -153,12 +154,15 @@ const loginUser = async (req, res) => {
 
         const userNew = await getUserByEmail(email);
 
+       // Actualiza el campo last_connection con la fecha y hora actuales
+       const lastCon = await lastConnection(email, new Date());
+        console.log(lastCon)
         //generar el jwt
         const {
             password: _,
             ...userResult
         } = userNew;
-        const accessToken = generateToken(userResult);
+        const accessToken = await generateToken(userResult);
 
 
         res.cookie('coderCookieToken', accessToken, {

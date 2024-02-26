@@ -41,10 +41,14 @@ const usersSchema = new mongoose.Schema({
     avatar: String,
     documents: [
         {
-          name: String, //nombre del documento
-          reference: String, //link al documento
+          name: String, 
+          reference: String, 
         },
     ],
+    last_connection: {
+        type: Date, 
+        default: Date.now 
+    }
 });
 
 usersSchema.pre(['find', 'findOne', 'findById'], function () {
