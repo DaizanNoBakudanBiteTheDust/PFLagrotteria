@@ -15,7 +15,8 @@ import {
     retrievePassword,
     updatePassword,
     userRole,
-    allUsers
+    allUsers,
+    userDocs
 } from '../../controlers/users.controller.js'
 import configs from '../../config.js'
 
@@ -45,6 +46,8 @@ router.post('/retrievePassword', retrievePassword);
 router.post('/resetPassword/:token', updatePassword);
 
 router.post("/premium/:uid", userRole);
+
+router.post("/:uid/documents", userDocs);
 
 router.get('/github', passport.authenticate('github', {
     scope: ['user:email']

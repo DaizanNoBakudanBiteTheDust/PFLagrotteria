@@ -324,6 +324,12 @@ const userRole = async (req, res) => {
     }
   };
 
+  //Documentos
+
+const UserDocs = async (req,res) => {
+
+}
+
 //Github
 
 const userGithubLogin = async (req, res) => {
