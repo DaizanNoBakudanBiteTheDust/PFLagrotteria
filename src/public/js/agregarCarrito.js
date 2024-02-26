@@ -9,14 +9,35 @@ async function addProduct(pid, cartId) {
             
              throw new Error('Error en la solicitud al servidor');
          }
+
          // Convierte el cuerpo de la respuesta en un objeto JSON
          const data = await response.json();
 
+         console.log(data)
+
+         const userEmail = user.email;
 
          const cartData = data.payload;
-
+         console.log(cartData.products.find(p => p.product._id.toString()))
          // Buscar el producto en el carrito por el ID del producto
          const existingProductIndex = cartData.products.find(p => p.product._id.toString() === pid);
+
+         console.log(pid)
+
+         const productOwnerEmail = pid.product.owner; // Assuming this attribute exists
+
+         console.log(productOwnerEmail)
+
+         /*---------------------------- Add this condition -----------------------------*/
+          if (productOwnerEmail === user.email) {
+            swal({
+                title: "Error",
+                text: "No puedes agregar tus propios productos al carrito",
+                icon: "error",
+                button: "Ok",
+              });
+          }
+
          
 
         if (existingProductIndex) {
@@ -54,6 +75,6 @@ async function addProduct(pid, cartId) {
 
      
     } catch (error) {
-        req.logger.error(error);
+        console.error(error);
     }
   }

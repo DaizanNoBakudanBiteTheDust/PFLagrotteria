@@ -37,7 +37,13 @@ const usersSchema = new mongoose.Schema({
         required: true,
         default: 'user'
     },
-    resetPasswordToken: { type: String }
+    resetPasswordToken: { type: String },
+    documents: [
+        {
+          name: String, //nombre del documento
+          reference: String, //link al documento
+        },
+    ],
 });
 
 usersSchema.pre(['find', 'findOne', 'findById'], function () {

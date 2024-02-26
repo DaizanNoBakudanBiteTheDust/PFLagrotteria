@@ -33,6 +33,7 @@
         <li>stock: {{this.stock}}</li>
         <li>Categoria: {{this.category}}</li>
         <li>ID: {{this._id}}</li>
+        <li>owner: {{this.owner}}</li>
         <button type="button" class="btn" onclick="addProduct('{{this._id}}', '{{../cartId}}')">Agregar al Carrito</button>
     </ul>
     {{/each}}
@@ -45,5 +46,6 @@
   {{/if}}
 </div>
 
-<script src="/js/agregarCarrito.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="/js/agregarCarrito.js"></script>

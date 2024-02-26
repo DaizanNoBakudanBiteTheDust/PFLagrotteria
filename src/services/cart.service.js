@@ -86,7 +86,7 @@ const purchase = async (cid, user) => {
       product,
       quantity
     }) => {
-      
+      console.log(product.stock)
         if (product.stock >= quantity) {
           const amountForProduct = product.precio * quantity;
           amount += amountForProduct;
