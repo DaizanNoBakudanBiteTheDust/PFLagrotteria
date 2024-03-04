@@ -24,7 +24,7 @@ import {uploader} from '../../utils/uploader.js';
 
 const router = Router();
 
-router.get('/', allUsers);
+router.get('/allUsers', allUsers);
 
 router.post('/register', registerUser);
 

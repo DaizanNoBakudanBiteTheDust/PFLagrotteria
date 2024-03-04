@@ -36,9 +36,14 @@ import {
 
 const allUsers = async () => {
     try {
-    const userEmail = await getAll();
+    const totalUsers = await getAll();
+ 
+    const userData = totalUsers.map(user => new infoDto(user));
 
-    return userEmail;
+    const userSpecs = JSON.stringify(userData, null, 2);;
+
+        console.log(userSpecs)
+    return userSpecs;
         
     } catch (error) {
         console.log(error)
@@ -469,7 +474,8 @@ const getCurrentUser = (req, res) => {
         const {
             first_name,
             last_name,
-            age
+            email,
+            role
         } = req.user;
 
         // Verifica si existen name y lastname antes de crear la instancia de infoDto
@@ -482,7 +488,8 @@ const getCurrentUser = (req, res) => {
         const User = new infoDto({
             first_name,
             last_name,
-            age
+            email,
+            role
         });
         res.status(200).json({
             user: User
