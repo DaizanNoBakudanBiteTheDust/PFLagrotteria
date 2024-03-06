@@ -514,9 +514,9 @@ const deltInactive = async (req, res) => {
         const last_connection = new Date(user.last_connection);
         const currentTime = new Date();
         const timeDifference = currentTime - last_connection;
-        const secondsInactive = Math.floor(timeDifference/1000);
+        const secondsInactive = Math.floor(timeDifference/ (1000 * 60 * 60));
 
-        return secondsInactive >= 30
+        return secondsInactive >= 48
 
       });
 
