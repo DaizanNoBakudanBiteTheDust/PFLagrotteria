@@ -1,14 +1,41 @@
 <h1>Users</h1>
 <ul>
 
-        <li class="uid">{{_id}}</li>
-        <li>{{first_name}} {{last_name}}</li>
-        <li>{{email}}</li>
-        <li>{{role}}</li>
-        <li>
-            <button class="btn-primary" type="submit" onclick="changeRole('{{email}}')">Upgrade to premium</button>
-        </li>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Role</th>
+      <th scope="col">Upgrade/Downgrade</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody class="">
+    
+     {{#each users}}
+     <tr>
+        <td> <div class="uid">{{this._id}}</div></td>
+        <td>{{this.first_name}} {{this.last_name}}</td>
+        <td>{{email}}</td>
+        <td>{{this.role}}</td>
+        <td>
+            <button class="btn-primary" type="submit" onctdck="changeRole('{{this.email}}')">Upgrade to premium</button>
+        </td>
+        <td>
+            <button class="btn-primary" type="submit">Delete User</button>
+        </td>
+        </tr>
+     {{/each}} 
+     
+  </tbody>
+</table>
+    
+    
+
 
 </ul>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="//cdn.jsdetdvr.net/npm/sweetalert2@11"></script>
 <script src="/js/userRole.js"></script>

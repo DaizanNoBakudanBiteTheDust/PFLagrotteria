@@ -4,7 +4,9 @@ import {
 import configs from '../../config.js';
 import Carts from '../../dao/dbManagers/cart.dao.js';
 import Messages from '../../dao/dbManagers/message.dao.js';
-import Users from '../../dao/dbManagers/users.dao.js';
+import {
+getAll
+} from '../../services/users.service.js';
 import {
     deleteProducts,
     getProducts,
@@ -14,10 +16,15 @@ import {
     getProductsByUserId
 } from '../../controlers/products.controller.js';
 import passport from 'passport';
-import {decodedToken} from '../../utils.js'
+import {
+    decodedToken
+} from '../../utils.js'
 import {
     productsModel
 } from "../../dao/dbManagers/models/products.models.js";
+import {
+    get
+} from 'mongoose';
 
 
 
@@ -25,7 +32,6 @@ const router = Router();
 
 const cartManager = new Carts();
 const chatManager = new Messages();
-const userManager = new Users();
 
 
 
@@ -33,10 +39,12 @@ const passportJWT = passport.authenticate('jwt', {
     session: false
 });
 
-const GithubStr = passport.authenticate('github', { session: false});
+const GithubStr = passport.authenticate('github', {
+    session: false
+});
 
 const publicAccess = (req, res, next) => {
-    if(req.user) return res.redirect('/');
+    if (req.user) return res.redirect('/');
     next();
 }
 
@@ -52,7 +60,7 @@ const privateAccess = (req, res, next) => {
         }
         if (req.user.role === 'admin') {
             res.redirect('/admin');
-        }else {
+        } else {
             next();
         }
     });
@@ -73,7 +81,7 @@ const premiumAccess = (req, res, next) => {
 
     req.user = user;
 
-    if(user.role !== "premium" && user.role !== "admin" ) return res.redirect('/');
+    if (user.role !== "premium" && user.role !== "admin") return res.redirect('/');
 }
 
 const AdminAccess = (req, res, next) => {
@@ -90,7 +98,7 @@ const AdminAccess = (req, res, next) => {
 
     req.user = user;
 
-    if(user.role !== "premium" && user.role !== "admin" ) return res.redirect('/');
+    if (user.role !== "premium" && user.role !== "admin") return res.redirect('/');
 }
 
 
@@ -110,12 +118,15 @@ router.get('/retrievePassword', publicAccess, (req, res) => {
 
 router.get('/resetPassword', publicAccess, (req, res) => {
     const user = req.user;
-    res.render('resetPassword', 
-    {email: user.email})
+    res.render('resetPassword', {
+        email: user.email
+    })
 });
 
 router.get('/resetPassword/:token', publicAccess, (req, res) => {
-    const {token} = req.params;
+    const {
+        token
+    } = req.params;
 
     res.render('resetPassword', {
         token
@@ -127,20 +138,20 @@ router.get('/resetPassword/:token', publicAccess, (req, res) => {
 router.get('/admin', AdminAccess, premiumAccess, async (req, res) => {
     let user = req.user;
     let products = await getProducts(req);
-    
-    console.log(user);
+
     res.render('realTimeProducts', {
         products,
         user
     });
 });
 
-router.get('/premium/:uid', AdminAccess, async (req, res) => {
+router.get('/premium', AdminAccess, async (req, res) => {
     try {
-        const { uid } = req.params;
-        const user = await userManager.getUserById(uid);
+        const users = await getAll();
 
-        res.render("role", user);
+        console.log(users)
+
+        res.render("role", {users: users});
     } catch (error) {
         console.error(error);
         res.status(500).send('Error interno del servidor');
@@ -159,7 +170,7 @@ router.get('/', privateAccess, async (req, res) => {
             // Utiliza _doc si está presente (por ejemplo, en la estrategia JWT)
             userData = user._doc;
         }
-        
+
         const isPremium = userData.role === "premium";
 
         // Obtener todos los productos
@@ -167,7 +178,7 @@ router.get('/', privateAccess, async (req, res) => {
 
         res.render('home', {
             user: userData,
-            cartId: userData.carts[0].cart._id,// solo funciona en null por ahora
+            cartId: userData.carts[0].cart._id, // solo funciona en null por ahora
             products: allProducts,
             isPremium: isPremium,
         });
@@ -181,9 +192,9 @@ router.get('/cart', privateAccess, async (req, res) => {
 
     const user = req.user;
 
-        let userData = user;
+    let userData = user;
 
-     const cartId = userData.carts[0].cart._id;
+    const cartId = userData.carts[0].cart._id;
 
     const cartById = cartId;
     const cartData = await cartManager.getCartById({
@@ -218,7 +229,7 @@ router.get('/chat', privateAccess, async (req, res) => {
 });
 
 
-router.get('/productsLog',AdminAccess, async (req, res) => {
+router.get('/productsLog', AdminAccess, async (req, res) => {
 
     res.render('home', {
         products: await getProducts(req)
@@ -300,8 +311,10 @@ router.get('/profile', privateAccess, async (req, res) => {
     let user = req.user;
     let status = user.status;
     console.log(user)
-  res.render("userProfile", { user: user,
-status: status });
+    res.render("userProfile", {
+        user: user,
+        status: status
+    });
 });
 
 router.get('/mockingproducts', AdminAccess, async (req, res) => {

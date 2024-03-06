@@ -43,7 +43,6 @@ const allUsers = async () => {
 
     const userSpecs = JSON.stringify(userData, null, 2);;
 
-        console.log(userSpecs)
     return userSpecs;
         
     } catch (error) {
