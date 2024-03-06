@@ -7,7 +7,8 @@ import {
     updateRole,
     getUserById,
     updateDocuments,
-    lastConnection
+    lastConnection,
+    deleteUser
 } from '../services/users.service.js';
 import {
     createHash,
@@ -229,7 +230,7 @@ const retrievePassword = async (req, res) => {
         const resetMail = `
           <h3>haz solicitado restablecer la clave de la siguiente siguiente cuenta:</h3>
           <p>Sigue este enlace para cambiar tu contraseña </p>
-          <a href="${resetLink}">${resetLink}
+          <a href="${resetLink}">${resetLink}</a>
           <p>Si no haz sido tu, ignora este correo</p>
       `;
 
@@ -502,6 +503,55 @@ const getCurrentUser = (req, res) => {
     }
 };
 
+const deltInactive = async (req, res) => {
+    try {
+
+        const totalUsers = await getAll();
+
+      // Obtener la lista de usuarios inactivos
+      const inactiveUsers = totalUsers.filter((user) =>
+      {
+        const last_connection = new Date(user.last_connection);
+        const currentTime = new Date();
+        const timeDifference = currentTime - last_connection;
+        const secondsInactive = Math.floor(timeDifference/1000);
+
+        return secondsInactive >= 30
+
+      });
+
+       //envio el mail
+    await inactiveUsers.forEach((user) => {
+
+        deleteUser(user.email);
+
+
+        const deletedMail = `
+          <h3>haz sido eliminado por no haber estado conectado en las ultimas 48 horas</h3>
+      `;
+
+        const emailUserDeleted = {
+            to: user.email, // Dirección de correo del usuario
+            subject: 'Usuario eliminado debido a Inactividad',
+            html: deletedMail // Puedes personalizar el formato del correo
+        }
+
+
+        sendEmail(emailUserDeleted);
+
+
+      })
+
+    //devuelvo el array de usuarios eliminados
+    res.send({ status: "success", payload: inactiveUsers });
+      
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al obtener lista de usuarios eliminados" });
+    }
+  };
+
 
 export {
     registerUser,
@@ -517,5 +567,6 @@ export {
     updatePassword,
     userRole,
     allUsers,
-    userDocs
+    userDocs,
+    deltInactive
 }

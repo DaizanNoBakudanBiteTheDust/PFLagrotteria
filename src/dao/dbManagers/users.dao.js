@@ -98,6 +98,15 @@ export default class Users {
           console.log(error);
         }
       };
+
+      deleteUser = async (email) => {
+        try {
+          const result = await usersModel.findOneAndDelete({ email: email });
+          return result;
+        } catch (error) {
+          console.log(error);
+        }
+      };
     
       
 } 

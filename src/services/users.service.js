@@ -8,6 +8,12 @@ const getAll = async () => {
     return userEmail;
 }
 
+const inactiveUser =  async () => {
+    const inactive = await manager.inactiveUser();
+
+    return inactive;
+}
+
 const getUserByEmail = async (email) => {
     const userEmail = await manager.getByEmail(email);
 
@@ -52,6 +58,12 @@ const lastConnection = async (email, last_connection) => {
   };
 
 
+  const deleteUser = async (email) => {
+    const result = await manager.deleteUser(email);
+    return result;
+  }
+
+
 
 export {
     getAll,
@@ -62,5 +74,6 @@ export {
     updateRole,
     getUserById,
     updateDocuments,
-    lastConnection
+    lastConnection,
+    deleteUser
 }
