@@ -1,10 +1,8 @@
-
-async function changeRole(email) {
+async function changeRole(userId, email) {
   // Cambiar el texto del botón
-  document.querySelector('.btn-primary').textContent = 'Saving...';
+  const buttonId = event.target.getAttribute('data-id');
 
-  let userId = document.querySelector('.uid').textContent;
-
+  document.querySelector(`.btn-primary[data-id="${buttonId}"]`).textContent = 'Saving...';
 
   const url = `/api/sessions/premium/${userId}`;
   try {
@@ -14,21 +12,21 @@ async function changeRole(email) {
         'Content-Type': 'application/json'
       }
     });
-
     if (response.ok) {
-      Swal.fire({
+      console.log(response)
+     await Swal.fire({
         title: "Role Changed",
       });
     } else {
       // Manejar los errores de forma más específica
       if (response.status === 400) {
-        Swal.fire({
+       await Swal.fire({
           title: "Error",
           text: "Error no encontrado",
           icon: "error",
         });
       } else {
-        Swal.fire({
+       await Swal.fire({
           title: "Error",
           text: "Error al cambiar de rol",
           icon: "error",
@@ -42,7 +40,7 @@ async function changeRole(email) {
 
   // Cambiar el texto del botón de nuevo
   setTimeout(() => {
-    document.querySelector('.btn-primary').textContent = 'Edit Role';
+    document.querySelector(`.btn-primary[data-id="${buttonId}"]`).textContent = 'Change Role to User';
   }, 2000);
 }
 
