@@ -502,6 +502,19 @@ const getCurrentUser = (req, res) => {
     }
 };
 
+const deleteUserAdm = async (req, res) => {
+    try {  
+        const { email } = req.body;
+
+      await deleteUser(email);
+
+      res.status(200).json({ message: "User deleted" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error deleting user" });
+    }
+}
+
 const deltInactive = async (req, res) => {
     try {
 
@@ -567,5 +580,6 @@ export {
     userRole,
     allUsers,
     userDocs,
-    deltInactive
+    deltInactive,
+    deleteUserAdm
 }

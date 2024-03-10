@@ -24,7 +24,7 @@
             <button class="btn-primary" type="submit" data-id="{{this._id}}" onclick="changeRole('{{this._id}}', '{{this.email}}')">Upgrade to premium</button>
         </td>
         <td>
-            <button class="btn-primary" type="submit">Delete User</button>
+            <button class="btn-primary deleteBtn" type="submit" data-id="{{this._id}}" onclick="deleteUser('{{this._id}}', '{{this.email}}')">Delete User</button>
         </td>
         </tr>
      {{/each}} 

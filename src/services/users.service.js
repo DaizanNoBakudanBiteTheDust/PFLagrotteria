@@ -8,12 +8,6 @@ const getAll = async () => {
     return userEmail;
 }
 
-const inactiveUser =  async () => {
-    const inactive = await manager.inactiveUser();
-
-    return inactive;
-}
-
 const getUserByEmail = async (email) => {
     const userEmail = await manager.getByEmail(email);
 

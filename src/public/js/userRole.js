@@ -37,10 +37,60 @@ async function changeRole(userId, email) {
     console.error("Error de red:", error);
   }
 
+    // Cambiar el texto del botón de nuevo
+    setTimeout(() => {
+      document.querySelector(`.btn-primary[data-id="${buttonId}"]`).textContent = 'Change Role to User';
+    }, 2000);
+  }
 
-  // Cambiar el texto del botón de nuevo
+   
+async function deleteUser(userId, email) {
+
+  const buttonId = event.target.getAttribute('data-id');
+
+  document.querySelector(`.btn-primary[data-id="${buttonId}"]`).textContent = 'Saving...';
+
+  try {
+    const response = await fetch(`/api/sessions/userDelete`, {
+      method: 'DELETE', // Método DELETE para eliminar
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email }) // Enviar el email del usuario a eliminar
+    });
+
+    if (response.ok) {
+      // Eliminación exitosa: mostrar mensaje y eliminar la fila
+      Swal.fire({
+        title: "User Deleted",
+      });
+      const row = document.querySelector(`tr[data-id="${userId}"]`); // Buscar la fila del usuario
+      row.remove(); // Eliminar la fila del DOM
+    } else {
+      // Manejar el error de eliminación
+      Swal.fire({
+        title: "Error",
+        text: "Error deleting user",
+        icon: "error",
+      });
+    }
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    Swal.fire({
+      title: "Error",
+      text: "Network error",
+      icon: "error",
+    });
+  }
+
   setTimeout(() => {
-    document.querySelector(`.btn-primary[data-id="${buttonId}"]`).textContent = 'Change Role to User';
+    document.querySelector(`.deleteBtn[data-id="${buttonId}"]`).textContent = 'User deleted';
   }, 2000);
+
 }
+
+  
+  
+
+
 

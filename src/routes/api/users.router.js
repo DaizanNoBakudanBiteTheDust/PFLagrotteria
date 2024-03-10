@@ -17,7 +17,8 @@ import {
     userRole,
     allUsers,
     userDocs,
-    deltInactive
+    deltInactive,
+    deleteUserAdm
 } from '../../controlers/users.controller.js';
 import configs from '../../config.js';
 import {uploader} from '../../utils/uploader.js';
@@ -65,6 +66,8 @@ router.get('/current', passport.authenticate('jwt', {
 }), getCurrentUser);
 
 router.get('/:uid', getUserId);
+
+router.delete('/userDelete', deleteUserAdm)
 
 router.delete('/inactiveUsers', deltInactive)
 
