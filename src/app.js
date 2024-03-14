@@ -35,7 +35,6 @@ import { addLogger, logger } from './utils/logger.js';
 
 import Products from './dao/dbManagers/products.dao.js';
 import {deleteProducts} from './controlers/products.controller.js';
-import Carts from './dao/dbManagers/cart.dao.js';
 import Messages from './dao/dbManagers/message.dao.js';
 
 
@@ -43,7 +42,6 @@ import Messages from './dao/dbManagers/message.dao.js';
 
 // const manager = new ProductManager(productsFilePath);
   const prodManager = new Products();
-  const cartManager = new Carts();
   const chatManager = new Messages();
 
 
