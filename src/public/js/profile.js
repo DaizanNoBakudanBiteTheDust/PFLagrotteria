@@ -2,7 +2,7 @@ const form = document.getElementById("uploadForm");
 const docType = document.getElementById("fileType");
 const docSelectStatus = document.getElementById("documentTypeContainer");
 let userId = document.querySelector(".userIdProf").textContent;
-console.log(userId)
+
 
 //cuando cambia el estado del select filetype al valor document, habilio el select documentType
 docType.addEventListener("change", (e) => {

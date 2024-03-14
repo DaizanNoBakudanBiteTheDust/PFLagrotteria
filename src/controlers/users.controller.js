@@ -208,7 +208,6 @@ const getUserId = async (req, res) => {
 
 const retrievePassword = async (req, res) => {
     try {
-        console.log('Recibida solicitud de recuperación de contraseña');
 
         const {
             email
@@ -219,9 +218,8 @@ const retrievePassword = async (req, res) => {
 
         //se genera token de reseteo que dura 1 hora
 
-        console.log('Usuario para generar el token:', user);
         const resetToken = await generateResetToken(user);
-        console.log('Token de reset generado:', resetToken);
+
 
         const resetLink = `localhost:8080/resetPassword/${resetToken}`;
 
@@ -262,7 +260,6 @@ const updatePassword = async (req, res) => {
     const {password} = req.body;
     const {token} = req.params;
 
-    console.log(req.body.password)
     try {
         const decode = await decodedToken(token); 
     
@@ -271,13 +268,13 @@ const updatePassword = async (req, res) => {
         }
         const user = await getUserByEmail(decode.email)
 
-        console.log(user)
+
         const duplicatedPass = await isValidPassword(user, password);
-        console.log(duplicatedPass)
+
 
         const newPassword = await createHash(password);
 
-        console.log(newPassword)
+
 
     if (duplicatedPass) {
       return res.status(400).send({
@@ -309,7 +306,6 @@ const userRole = async (req, res) => {
       //busco el user por email
       const user = await getUserById(uid);
 
-      console.log(user)
 
        // Obtener el correo electrónico y el rol del usuario
        const { email, role } = user;
@@ -391,11 +387,7 @@ const userDocs = async (req,res) => {
           documents.push({ name: file.originalname, reference: file.path });
         });
       }
-  
-      console.log("documents:");
-      console.log(documents);
-      console.log("status:");
-      console.log(newStatus);
+
   
       const docUpdated = {
         documents,

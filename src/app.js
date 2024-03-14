@@ -175,10 +175,6 @@ io.on('connection', socket => {
 
                let productData = await prodManager.getProductById(data);
 
-               console.log(userEmail)
-               console.log(userRole)
-               console.log(data)
-
                if (userEmail === productData.owner && userRole == "premium" || userRole == "admin") {
 
                 const productId = productData._id;

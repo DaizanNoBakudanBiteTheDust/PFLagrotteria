@@ -14,8 +14,6 @@ form.addEventListener("submit", async (e) => {
         "Content-Type": "application/json",
       },
     })
-    console.log('Ruta retrievePassword alcanzada con éxito');
-    console.log(response.status);
   
     if (response.ok) {
       Swal.fire({

@@ -10,7 +10,6 @@ const persistence = "MONGO"; //Variables de ambiente
 
 switch (persistence) {
     case 'MONGO':
-        console.log('Trabajando con persistencia en MongoDB');
         const mongoose = await import('mongoose');
         await mongoose.connect(configs.mongoUrl);//Variables de ambiente
         const { default: UsersMongo } = await import('./dbManagers/users.dao.js');

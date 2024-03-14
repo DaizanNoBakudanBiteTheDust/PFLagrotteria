@@ -6,7 +6,6 @@ const socket = io();
 let userEmail = document.getElementById('emailUsuario').textContent;
 let userRole = document.getElementById('roleUsuario').textContent;
 
-console.log(userEmail, userRole);
 
 
 //AGREGAR

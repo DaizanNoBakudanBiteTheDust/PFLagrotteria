@@ -37,7 +37,6 @@ export default class Users {
 
     getUserById = async (id) => {
         const result = await usersModel.findById(id);
-        console.log(result)
         return result;
     }
     
