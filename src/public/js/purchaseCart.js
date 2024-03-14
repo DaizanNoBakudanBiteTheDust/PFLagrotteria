@@ -25,7 +25,7 @@ function purchaseCart() { // Recibe cartId como parámetro
             title: "Carrito Procesado correctamente",
             text: "recibiras un correo con el detalle de tu compra",
           });
-          setInterval("location.reload()",10000);
+          setInterval("location.reload()",4000);
     })
     .catch(error => {
       req.logger.error(error);

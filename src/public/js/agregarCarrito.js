@@ -37,7 +37,6 @@ async function addProduct(pid, cartId) {
         });
 
         if (updateResponse.status === 200) {
-            logger.info('Producto añadido al carrito', cartData);
             Toastify({
                 text: `Tu producto ha sido agregado al carrito`,
                 gravity: "bottom",

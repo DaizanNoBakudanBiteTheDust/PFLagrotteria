@@ -69,37 +69,37 @@ const privateAccess = (req, res, next) => {
 
 const premiumAccess = (req, res, next) => {
     let token = req.cookies.coderCookieToken;
+    let user = decodedToken(token);
 
-    let user = decodedToken(token)
-
-    if (adminUserPredator.email && adminUserPredator.password) {
-        req.user = user;
-        next();
-    } else {
+    if (!user) {
         return res.status(403).send('No tienes permisos para acceder a esta ruta');
     }
 
-    req.user = user;
-
-    if (user.role !== "premium" && user.role !== "admin") return res.redirect('/');
-}
+    if (user.role === 'premium' || user.role === 'admin') {
+        req.user = user;
+        next(); // Continuar con la siguiente middleware
+    } else {
+        return res.redirect('/'); // Redirigir si no es un usuario premium o admin
+    }
+};
 
 const AdminAccess = (req, res, next) => {
     let token = req.cookies.coderCookieToken;
+    let user = decodedToken(token);
 
-    let user = decodedToken(token)
-
-    if (adminUserPredator.email && adminUserPredator.password) {
-        req.user = user;
-        next();
-    } else {
+    if (!user) {
         return res.status(403).send('No tienes permisos para acceder a esta ruta');
     }
 
-    req.user = user;
+    // Verificamos si el usuario es un administrador
+    if (user.email === adminUserPredator.email && user.password === adminUserPredator.password) {
+        req.user = user;
+        return next(); // Continuar con la siguiente middleware
+    }
 
-    if (user.role !== "premium" && user.role !== "admin") return res.redirect('/');
-}
+    // Si no es un usuario admin, pasamos al siguiente middleware sin enviar una respuesta
+    next();
+};
 
 
 
@@ -187,6 +187,8 @@ router.get('/', privateAccess, async (req, res) => {
         res.status(500).send('Error interno del servidor');
     }
 });
+
+//Ruta cart
 
 router.get('/cart', privateAccess, async (req, res) => {
 
