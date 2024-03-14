@@ -75,7 +75,7 @@ const premiumAccess = (req, res, next) => {
         return res.status(403).send('No tienes permisos para acceder a esta ruta');
     }
 
-    if (user.role === 'premium' || user.role === 'admin') {
+    if (req.user.role === 'premium'){
         req.user = user;
         next(); // Continuar con la siguiente middleware
     } else {
@@ -95,10 +95,10 @@ const AdminAccess = (req, res, next) => {
     if (user.email === adminUserPredator.email && user.password === adminUserPredator.password) {
         req.user = user;
         return next(); // Continuar con la siguiente middleware
+    }else{
+        return res.redirect('/')
     }
 
-    // Si no es un usuario admin, pasamos al siguiente middleware sin enviar una respuesta
-    next();
 };
 
 
