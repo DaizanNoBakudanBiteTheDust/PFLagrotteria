@@ -79,23 +79,20 @@ const purchase = async (cid, user) => {
     let amount = 0;
     const outStock = [];
 
-
     const productsToUpdate = [];
 
     await Promise.all(cart.products.map(async ({
       product,
       quantity
     }) => {
-      console.log(product.stock)
         if (product.stock >= quantity) {
           const amountForProduct = product.precio * quantity;
           amount += amountForProduct;
           // Actualizar stock
           productsToUpdate.push({
             _id: product._id,
-            $set: {
-                stock: product.stock - quantity
-            }
+            newStockValue: product.stock - quantity
+            
         });
         } else {
           outStock.push({
@@ -106,6 +103,12 @@ const purchase = async (cid, user) => {
         }
     
     }));
+
+     // Actualizar el stock de los productos
+     await Promise.all(productsToUpdate.map(async ({ _id, newStockValue }) => {
+      await productRepo.updateStock(_id, newStockValue);
+    }));
+
 
 
     const ticket = await generatePurchase(user, amount);
@@ -119,20 +122,17 @@ const purchase = async (cid, user) => {
   `;
 
     const emailCredentials = {
-      to: user, // Dirección de correo del usuario
+      to: user.email, // Dirección de correo del usuario
       subject: 'Ticket de compra',
       html: formattedTicket // Puedes personalizar el formato del correo
     }
   
 
-    await sendEmail(emailCredentials);
-
+     await sendEmail(emailCredentials);
 
     // Confirmar transacción
     await session.commitTransaction();
 
-  
-    await productRepo.updateById()
 
     await cartRepo.emptycart(cid);
 
