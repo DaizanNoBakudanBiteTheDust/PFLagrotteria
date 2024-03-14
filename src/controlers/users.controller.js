@@ -161,7 +161,6 @@ const loginUser = async (req, res) => {
 
        // Actualiza el campo last_connection con la fecha y hora actuales
        const lastCon = await lastConnection(email, new Date());
-        console.log(lastCon)
         //generar el jwt
         const {
             password: _,

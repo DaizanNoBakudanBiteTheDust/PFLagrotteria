@@ -6,6 +6,9 @@ import {
         getProductsByUser
 } from '../services/products.service.js';
 import {
+        getUserByEmail
+} from '../services/users.service.js';
+import {
         productsModel
 } from '../dao/dbManagers/models/products.models.js';
 import customError from '../middlewares/errors/customError.js';
@@ -13,6 +16,9 @@ import EErrors from '../middlewares/errors/enums.js';
 import {
         v4 as uuidv4
 } from 'uuid';
+import {
+        sendEmail
+} from '../services/mail.service.js';
 
 
 const getProducts = async (req, res) => {
@@ -145,14 +151,15 @@ const deleteProducts = async (req, res) => {
 
         try {
                 const io = req.app.get('socketio');
-                const user = req.user;
                 const {
                         pid
                 } = req.params;
-        
+
+                const product = await idProduct(pid);
+
+                const user = await getUserByEmail(product.owner);
+
                 const role = user.role;
-                // Obtener el producto por su ID
-                const product = await productsModel.findById(pid);
 
                 // Verificar si el producto existe
                 if (!product) {
@@ -162,20 +169,33 @@ const deleteProducts = async (req, res) => {
                         });
                 }
 
-                if (role !== 'premium') {
-                        return res.status(403).send({
-                                status: 'error',
-                                error: 'You are not authorized to delete products'
-                        });
-                }
-
                 // Verificar si el usuario es propietario del producto
-                if (product.owner !== user._id.toString()) {
+                if (product.owner !== user.email && product.owner !== 'admin') {
                         return res.status(403).send({
                                 status: 'error',
                                 error: 'You are not authorized to delete this product'
                         });
                 }
+
+
+
+                const productErasedMail = `
+            <h3>Producto Eliminado: ${product.titulo}</h3>
+                        <p>Estimado/a ${user.first_name},</p>
+                        <p>Le informamos que el producto "${product.titulo}" ha sido eliminado satisfactoriamente de nuestra plataforma.</p>
+                        <p>Si no realizaste esta acción, te recomendamos que contactes a nuestro equipo de soporte lo antes posible.</p>
+                        <p>Gracias por tu comprensión y colaboración.</p>
+                `;
+
+                const emailCredentials = {
+                        to: user.email, // Dirección de correo del usuario
+                        subject: 'producto eliminado',
+                        html: productErasedMail // Puedes personalizar el formato del correo
+                }
+
+
+                await sendEmail(emailCredentials);
+
                 const result = await deleteProduct({
                         _id: pid
                 }, product);
@@ -188,10 +208,10 @@ const deleteProducts = async (req, res) => {
                 });
         } catch (error) {
                 console.error('Error al eliminar el producto', error);
-        return res.status(500).send({
-            status: 'error',
-            error: 'Error al eliminar el producto'
-        });
+                return res.status(500).send({
+                        status: 'error',
+                        error: 'Error al eliminar el producto'
+                });
         }
 }
 
