@@ -10,7 +10,6 @@ import configs from '../config.js';
 
 // estrategia JWT
 
-const localStrategy = local.Strategy;
 const JWTSrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
 
