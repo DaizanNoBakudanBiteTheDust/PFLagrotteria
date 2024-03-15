@@ -69,37 +69,37 @@ const privateAccess = (req, res, next) => {
 
 const premiumAccess = (req, res, next) => {
     let token = req.cookies.coderCookieToken;
-    let user = decodedToken(token);
 
-    if (!user) {
+    let user = decodedToken(token)
+
+    if (adminUserPredator.email && adminUserPredator.password) {
+        req.user = user;
+        next();
+    } else {
         return res.status(403).send('No tienes permisos para acceder a esta ruta');
     }
 
-    if (req.user.role === 'premium'){
-        req.user = user;
-        next(); // Continuar con la siguiente middleware
-    } else {
-        return res.redirect('/'); // Redirigir si no es un usuario premium o admin
-    }
-};
+    req.user = user;
+
+    if (user.role !== "premium" && user.role !== "admin") return res.redirect('/');
+}
 
 const AdminAccess = (req, res, next) => {
     let token = req.cookies.coderCookieToken;
-    let user = decodedToken(token);
 
-    if (!user) {
+    let user = decodedToken(token)
+
+    if (adminUserPredator.email && adminUserPredator.password) {
+        req.user = user;
+        next();
+    } else {
         return res.status(403).send('No tienes permisos para acceder a esta ruta');
     }
 
-    // Verificamos si el usuario es un administrador
-    if (user.email === adminUserPredator.email && user.password === adminUserPredator.password) {
-        req.user = user;
-        return next(); // Continuar con la siguiente middleware
-    }else{
-        return res.redirect('/')
-    }
+    req.user = user;
 
-};
+    if (user.role !== "admin") return res.redirect('/');
+}
 
 
 
@@ -135,7 +135,7 @@ router.get('/resetPassword/:token', publicAccess, (req, res) => {
 });
 
 
-router.get('/admin', AdminAccess, premiumAccess, async (req, res) => {
+router.get('/admin', premiumAccess, async (req, res) => {
     let user = req.user;
     let products = await getProducts(req);
 
